@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import css from './Gallery.module.css';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Searchbar from 'components/Searchbar/Searchbar';
 import ImageGallery from 'components/ImageGallery/ImageGallery';
@@ -15,7 +15,6 @@ class Gallery extends Component {
     loading: false,
     page: 0,
     searchQuery: '',
-    error: null,
     data: {},
     showModal: false,
     largeImageURL: '',
@@ -28,8 +27,9 @@ class Gallery extends Component {
       try {
         this.setState({ loading: true });
         const data = await fetchImages(searchQuery, page);
-        if (data.totalHits <= 0) {
-          throw new Error('404');
+        if (data.hits.length === 0) {
+          toast.error('NOTHING FOUND');
+          return;
         }
         this.setState(prev => ({
           data,
@@ -37,7 +37,9 @@ class Gallery extends Component {
           loading: false,
         }));
       } catch (error) {
-        this.setState({ error, loading: false });
+        toast.error(error.message);
+      } finally {
+        this.setState({ loading: false });
       }
     }
   }
@@ -71,8 +73,7 @@ class Gallery extends Component {
   };
 
   render() {
-    const { items, loading, error, data, showModal, largeImageURL, tags } =
-      this.state;
+    const { items, loading, data, showModal, largeImageURL, tags } = this.state;
 
     return (
       <div className={css.gallery}>
@@ -82,11 +83,7 @@ class Gallery extends Component {
           </Modal>
         )}
         <Searchbar onSubmit={this.onSearchImages} />
-        {error && (
-          <h2 className={css.error}>
-            Image {this.state.searchQuery} not found.
-          </h2>
-        )}
+
         <ToastContainer autoClose={3000} theme="colored" position="top-right" />
 
         <ImageGallery items={items} onClick={this.showModal} />
