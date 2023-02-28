@@ -1,0 +1,10 @@
+.gallery {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.error {
+  margin-right: auto;
+  margin-left: auto;
+}
