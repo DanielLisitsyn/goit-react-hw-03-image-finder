@@ -86,7 +86,9 @@ class Gallery extends Component {
 
         <ToastContainer autoClose={3000} theme="colored" position="top-right" />
 
-        <ImageGallery items={items} onClick={this.showModal} />
+        {items.length > 0 && (
+          <ImageGallery items={items} onClick={this.showModal} />
+        )}
         {loading && <Loader />}
         {items.length < data.totalHits && items.length > 0 && (
           <Button onClick={this.onLoadMore} />
