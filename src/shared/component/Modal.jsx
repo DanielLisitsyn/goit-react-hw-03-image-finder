@@ -6,11 +6,6 @@ import css from './Modal.module.css';
 const modalRoot = document.getElementById('modal-root');
 
 class Modal extends Component {
-  onClickEsc(e) {
-    if (e.code === 'Escape') {
-      this.props.close();
-    }
-  }
   componentDidMount() {
     document.body.addEventListener('keydown', this.onClickEsc);
   }
@@ -19,9 +14,15 @@ class Modal extends Component {
     document.body.removeEventListener('keydown', this.onClickEsc);
   }
 
+  onClickEsc = e => {
+    if (e.code === 'Escape') {
+      this.props.onClose();
+    }
+  };
+
   handleClose = ({ target, currentTarget }) => {
     if (target === currentTarget) {
-      this.props.close();
+      this.props.onClose();
     }
   };
   render() {

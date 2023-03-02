@@ -78,7 +78,7 @@ class Gallery extends Component {
     return (
       <div className={css.gallery}>
         {showModal && (
-          <Modal close={this.closeModal}>
+          <Modal onClose={this.closeModal}>
             <img src={largeImageURL} alt={tags} width="800" />
           </Modal>
         )}
